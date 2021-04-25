@@ -9,7 +9,7 @@ var PORT = process.env.PORT || 8000;
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-app.use(express.static(paths.join(__dirname, "./public/assets")));
+app.use(express.static(paths.join(__dirname, "./public")));
 
 const writeFileA = util.promisify(fs.watchFile);
 const readFileA = util.promisify(fs.readFile);
