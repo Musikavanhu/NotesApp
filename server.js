@@ -1,77 +1,59 @@
 var express = require("express");
-var path = require("path");
-var fs = require('fs');
-var util = require('util');
+var paths = require("path");
+var fs =require("fs");
+var util = require("util");
 
-// Tells node that we are creating an "express" server
 var app = express();
 
-// Sets an initial port. We"ll use this later in our listener
 var PORT = process.env.PORT || 8000;
 
-// Sets up the Express app to handle data parsing
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "./public")));
+app.use(express.static(paths.join(__dirname, "./public")));
 
-//Set variables
-const writefileAsync = util.promisify(fs.writeFile);
-const readFileAsync = util.promisify(fs.readFile);
+const writeFileA = util.promisify(fs.watchFile);
+const readFileA = util.promisify(fs.readFile);
 let allNotes;
 
-// ROUTER
-// The below points our server to set up routes
-app.get("/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, "./public/notes.html"));
+app.get("/notes", function(req, res){
+    res.sendFile(paths.join(__dirname, "./public/notes.html"));
 });
-
-app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "./public/index.html"));
+app.get("/", function(req, res){
+    res.sendFile(paths.join(__dirname, "./public/index.html"));
 });
-
-app.get("/api/notes", function (req, res) {
-    readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
-        .then(function (data) {
-            return res.json(JSON.parse(data));
-        });
+app.get("/api/notes", function(req, res){
+    readFileA(paths.join(__dirname, "./db/db.json"), "utf8"
+    ) .then(function(data){
+        return res.json(JSON.parse(data));
+    });
 });
-
-app.post("/api/notes", function (req, res) {
+app.post("/api/notes", function(req, res){
     var newNote = req.body;
-    readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
-        .then(function (data) {
-            allNotes = JSON.parse(data);
-            if (newNote.id || newNote.id === 0) {
-                let currNote = allNotes[newNote.id];
-                currNote.title = newNote.title;
-                currNote.text = newNote.text;
-            } else {
-                allNotes.push(newNote);
-            }
-            writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
-                .then(function () {
-                    console.log("Wrote db.json");
-                })
-        });
-    res.json(newNote);
+    readFileA(paths.join(__dirname, "./db/db.json"), "utf8").then(function (data){
+        allNotes = JSON.parse(data);
+        if (newNote.id || newNote.id === 0){
+            let currentNote = allNotes[newNote.id];
+            currentNote.title = newNote.title;
+            currentNote.text = newNote.text;
+        } else {
+            allNotes.push(newNote);
+        }
+        writeFileA(paths.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
+        .then(function(){
+            console.log("wrote to json");
+        })
+    });
+res.json(newNote);
 });
-
-app.delete("/api/notes/:id", function (req, res) {
+app.delete("/api/notes/:id", function(req, res){
     var id = req.params.id;
-    readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
-        .then(function (data) {
-            allNotes = JSON.parse(data);
-            allNotes.splice(id, 1);
-            writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
-                .then(function () {
-                    console.log("Deleted db.json");
-                })
-        });
-    res.json(id);
-});
+    readFileA(paths.join(__dirname, "./db/db,json"), JSON.stringify(allNotes))
+    .then(function (){
+        console.log("Delted json");
+    })
 
-// LISTENER
-// The below code effectively "starts" our server
-app.listen(PORT, function () {
-    console.log("App listening on PORT: " + PORT);
+res.join(id);
+});
+app.listen(PORT, function(){
+    console.log("listening to PORT" + PORT);
 });
