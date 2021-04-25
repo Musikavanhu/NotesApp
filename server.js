@@ -9,17 +9,17 @@ var PORT = process.env.PORT || 8000;
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-app.use(express.static(paths.join(__dirname, "./public")));
+app.use(express.static(paths.join(__dirname, "./public/assets")));
 
 const writeFileA = util.promisify(fs.watchFile);
 const readFileA = util.promisify(fs.readFile);
 let allNotes;
 
 app.get("/notes", function(req, res){
-    res.sendFile(paths.join(__dirname, "./public/notes.html"));
+    res.sendFile(paths.join(__dirname, "./public/assets/notes.html"));
 });
 app.get("/", function(req, res){
-    res.sendFile(paths.join(__dirname, "./public/index.html"));
+    res.sendFile(paths.join(__dirname, "./public/assets/index.html"));
 });
 app.get("/api/notes", function(req, res){
     readFileA(paths.join(__dirname, "./db/db.json"), "utf8"
