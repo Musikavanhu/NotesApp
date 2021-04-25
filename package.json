@@ -1,18 +1,14 @@
 {
-  "name": "notes-app",
+  "name": "note-taker",
   "version": "1.0.0",
-  "description": "## Your Task",
+  "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "moenyz"
-  ],
-  "author": "tino",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.16.4"
   }
 }
