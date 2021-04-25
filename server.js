@@ -16,10 +16,10 @@ const readFileA = util.promisify(fs.readFile);
 let allNotes;
 
 app.get("/notes", function(req, res){
-    res.sendFile(paths.join(__dirname, "./public/assets/notes.html"));
+    res.sendFile(paths.join(__dirname, "./public/assets/index.html"));
 });
 app.get("/", function(req, res){
-    res.sendFile(paths.join(__dirname, "./public/assets/index.html"));
+    res.sendFile(paths.join(__dirname, "./public/assets/notes.html"));
 });
 app.get("/api/notes", function(req, res){
     readFileA(paths.join(__dirname, "./db/db.json"), "utf8"
